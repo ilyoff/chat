@@ -1,36 +1,55 @@
 var express = require('express');
-router = express.Router();
-var users = require('../../models/user.js');
+var router = express.Router();
+var path = require('path')
+var users = require(path.join(process.cwd(), '/models/user.js'));
 
+router.post('/users/signup', function (req, res) {
+  var user = new users(req.body)
 
-/* GET users listing. */
-router.get('/users', function(req, res, next) {
-  users.find({}, function (err, users) {
+  user.save(function (err, user) {
     if (err) {
-      return console.log('Not found')
-    };
+      return res.json({
+        success: false,
+        message: 'Sign up error! ' + err
+      });
+    }
 
-    res.render('users', {
-      users: users
-    });
-
-  })
+    res.json({success: true, user: user});
+  });
 });
- 
-router.get('/users/:id', function (req, res, next) {
-  var userId = req.params.id;
-  console.log(userId);
-  users.findOne({_id: userId}, function (err, user) {
+
+router.post('/users/login', function (req, res) {
+  var user = req.body;
+
+  users.findOne({email: user.email}, function (err, user) {
     if (err) {
-      return console.log('Not found')
-    };
+      return res.json({
+        success: false,
+        message: 'Login error!!! ' + err
+      });
+    }
 
-    res.render('users', {
-      users: [user]
-    });
+    if (!user) {
+      res.json({
+        success: false, 
+        message: 'No such user!'
+      });
+    }
 
-    
-  })
+    res.json({success: true, user: user});
+  });
 });
+
+router.post('/users/edit', function (req, res) {
+  var user = req.body;
+
+  users.update({email: user.email}, user, function (err, user) {
+    if (err) {
+      return res.json({err: 'Edit login error!!! ' + err});
+    }
+
+    res.json({success: true, user: user});
+  });
+})
 
 module.exports = router;
