@@ -1,13 +1,11 @@
 var express = require('express');
 var router = express.Router();
+var config = require('../config');
 var path = require('path');
-var fs = require('fs');
-var pagesDir = path.join(__dirname, 'pages');
+var STATIC_PATH = config.get('static_dir');
 
-fs.readdir(pagesDir, function (err, routes) {
-  routes.forEach(function(route){
-    router.use(require(path.join(pagesDir, route)));
-  });
+router.get('/', function(req, res, next) {
+  res.sendfile('index.html', { root: STATIC_PATH });
 });
 
 module.exports = router;

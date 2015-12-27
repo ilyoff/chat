@@ -8,7 +8,6 @@ var app = require('../app');
 var logger = require('logger');
 var http = require('http');
 var config = require('../config');
-var mongoose = require('../lib/mongoose');
 
 /**
  * Get port from environment and store in Express.
@@ -90,26 +89,3 @@ function onListening() {
     : 'port ' + addr.port;
   logger.info('Listening on ' + bind);
 }
-
-// creating admin user
-var admin = config.get('mongoose:admin');
-var User = require('../models/user');
-
-User.find({email: admin.email}, function (err, result) {
-  if (err) {
-    return logger.info('admin find error', err);
-  };
-
-  if (result.length) {
-    return logger.info('Admin account already exists');
-  };
-
-  var model = new User(admin);
-  model.save(function (err) {
-    if (err) {
-      return logger.info('Admin save error', err);
-    };
-
-    logger.info('Admin account successfully created');
-  })
-});
