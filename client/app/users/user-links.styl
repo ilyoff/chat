@@ -1,0 +1,85 @@
+.user-links
+  position relative
+  width 300px
+  display inline-block
+  vertical-align middle
+  white-space nowrap
+
+  &__no-user
+    padding 5px
+
+  &__title
+    color #111
+    font-size 14px
+    font-weight bold
+
+  &__link
+    color #0059B2
+    text-decoration underline
+    transition all .5s
+
+    &:hover
+      color rgba(@color, .75)
+      text-decoration none
+
+
+.popup
+  position absolute
+  top 100%
+  left 0
+  width 300px
+  padding 10px
+  background #fff
+  box-shadow 0 0 5px rgba(#000, .5)
+  z-index 9999
+
+
+.form
+  padding 10px
+
+  &__title
+    margin 0 0 15px
+    font-size 18px
+    text-align center
+
+  &__control
+    display block
+    width 100%
+    margin-bottom 5px
+    padding 5px
+    border 1px solid #ccc
+    border-radius 3px
+    color #111
+
+  &__btn
+    display block
+    width 100%
+    margin-bottom 15px
+
+  &__link
+    display inline-block
+    width 100%
+    text-align center
+
+.avatar
+  width 40px
+  height 40px
+  border 3px solid rgba(#000, .5)
+  border-radius 50%
+  overflow hidden
+
+  img
+    max-width 100%
+
+
+.user-card
+  position relative
+  padding 5px 0
+  overflow hidden
+
+  &__img
+    float left
+    margin-right 15px
+
+  &__name
+    font-size 18px

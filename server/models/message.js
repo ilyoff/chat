@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 
 var schema = new Schema({
   author: {
-    type: String,
+    type: Schema.ObjectId,
+    ref: 'User',
     required: true
   },
 
@@ -14,7 +15,8 @@ var schema = new Schema({
 
   createdAt: {
     type: Date,
-    required: true
+    required: true,
+    default: Date.now
   },
 
   recipients: {
@@ -22,8 +24,14 @@ var schema = new Schema({
     ref: 'User'
   },
 
-  private: {
-    type: Boolean
+  isPrivate: {
+    type: Boolean,
+    default: false
+  },
+
+  status: {
+    type: String,
+    default: 'recieved'
   }
 });
 

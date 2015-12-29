@@ -1,0 +1,93 @@
+.user-links
+  .user-links__no-user(ng-if="!user")
+    .user-links__title Вы не авторизованы
+    a(ng-click="showPopup()").user-links__link.link
+      | Войти в чат
+    .popup(ng-show="popup")
+      .popup__page(ng-show="login")
+        form(
+          name="loginForm",
+          ng-submit="loginUser(data)",
+        ).form
+
+          h3.form__title Войти
+
+          input(
+            type="email",
+            name="email",
+            ng-model="data.email",
+            required,
+            placeholder="Email"
+          ).form__control
+
+          input(
+            name="pass",
+            type="password",
+            ng-model="data.password",
+            required,
+            placeholder="Пароль"
+          ).form__control
+
+          input(
+            type="submit",
+            value="Отправить"
+            ng-disabled="loginForm.$invalid"
+          ).btn.btn_primary.form__btn
+
+          a(ng-click="toggleForm()").form__link.link
+            | Еще нет аккаунта?
+            br
+            |Зарегистрируйтесь!
+
+      .popup__page(ng-show="signup")
+        form(
+          name="signupForm",
+          ng-submit="createUser(data)"
+        ).form
+
+          h3.form__title Зарегистрироваться
+
+          input(
+            type="email",
+            name="email",
+            ng-model="data.email",
+            required,
+            placeholder="Email"
+          ).form__control
+
+          input(
+            name="pass",
+            type="password",
+            ng-model="data.password",
+            required,
+            placeholder="Пароль"
+          ).form__control
+
+          input(
+            type="text",
+            name="nickname",
+            ng-model="data.nickname"
+            required,
+            placeholder="Никнейм"
+          ).form__control
+
+          input(
+            type="submit",
+            value="Отправить"
+            ng-disabled="signupForm.$invalid"
+          ).btn.btn_primary.form__btn
+
+          span(ng-if="errorText").form__error {{error}}
+
+        a(ng-click="toggleForm()").form__link.link Уже есть аккаунт? Войдите
+
+  .user-links__autorized(ng-if="user")
+    .user-card
+      .user-card__img.avatar
+        img(ng-src="{{user.avatar}}")
+
+      .user-card__name
+        | {{user.nickname}}
+
+      a(ng-click="logout()").link.link_small Выйти
+

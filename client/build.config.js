@@ -24,5 +24,6 @@ module.exports = {
   extDir: outDir + 'app/vendor/',
   extCss: outDir + 'app/vendor/css/',
   extFonts: outDir + 'app/vendor/fonts/',
-  extJs: outDir + 'app/vendor/js/'
+  extJs: outDir + 'app/vendor/js/',
+
 };

@@ -2,12 +2,12 @@
   'use strict';
 
   /* @ngdoc object
-   * @name home
+   * @name chat
    * @description
    *
    */
   angular
-    .module('home', [
+    .module('chat', [
       'ui.router'
     ]);
 }());

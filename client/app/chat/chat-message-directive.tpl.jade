@@ -1,0 +1,28 @@
+.message
+  .message__avatar.avatar
+    img(ng-src="{{message.author.avatar}}")
+
+  .message__body
+    .message__meta
+      a.message__name(ng-click="sendTo(message.author)")
+        | {{message.author.nickname}}
+
+      span.message__date
+        | {{message.createdAt | date: 'dd.MM.yyyy H:mm:ss'}}
+
+      .label.label_danger.label_small(ng-if="message.isPrivate")
+        | Приватное сообщение
+      .message__status
+        .message__spinner.spinner(ng-if="message.status === 'pending'")
+          .bounce1
+          .bounce2
+          .bounce3
+
+        span(
+          ng-show="message.status === 'recieved'"
+        ).message__status-label
+          i.fa.fa-check
+          | Доставлено
+
+
+    .message__text {{message.text}}

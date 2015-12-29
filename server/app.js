@@ -4,17 +4,22 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('./middleware/session.js');
+var cors = require('cors');
 var config = require('./config');
 var STATIC_PATH = config.get('static_dir');
+
 
 var routes = require('./routes');
 
 var app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session);
 app.use(express.static(STATIC_PATH));
 app.use(routes);
 

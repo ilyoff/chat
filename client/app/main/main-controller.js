@@ -13,29 +13,7 @@
     .module('main')
     .controller('MainCtrl', MainCtrl);
 
-  function MainCtrl($scope, Users) {
-    $scope.user = {
-      email: 'test@email.ru',
-      password: 'testtest',
-      nickname: 'testNickName'
-    };
+  function MainCtrl($scope, User) {
 
-    $scope.login = function (user) {
-      Users.login(user).then(function (user) {
-        $scope.newUser = user;
-      });
-    };
-
-    $scope.createUser = function (user) {
-      Users.signup(user).then(function (user) {
-        $scope.newUser = user;
-      });
-    };
-
-    $scope.editUser = function (user) {
-      Users.edit(user).then(function (user) {
-        $scope.newUser = user;
-      })
-    }
   }
 }());

@@ -3,6 +3,7 @@ html(lang='en' data-ng-app='client')
   head
     title client
     meta(name='viewport' content='width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes')
+    link(rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic')
     |<!-- inject:head:js -->
     |<!-- endinject -->
     |<!-- inject:html -->
@@ -13,7 +14,83 @@ html(lang='en' data-ng-app='client')
     |<!-- endinject -->
   body
 
-    div(data-ui-view)
+    div(ng-controller="MainCtrl").page
+      .page__header
+        button.hamburger(ng-click="openAside= !openAside")
+          i.fa.fa-bars
+
+        user-links
+
+
+
+
+      .page__content
+        .chat(ng-controller="ChatCtrl")
+          aside.chat__aside(ng-class="{'chat__aside_open': openAside}")
+            h3(ng-if="!users.length") В чате пока никого нет
+            .online-users(ng-if="users.length")
+              h3 Онлайн ({{users.length}})
+              .online-user.user-card(ng-repeat="user in users")
+                .user-card__img.avatar
+                  img(ng-src="{{user.avatar}}")
+                .user-card__name
+                  a(ng-click="setRecipient(user)").link
+                    | {{user.nickname}}
+
+          .chat__main
+            .chat__content
+              .chat__list(scroll-glue)
+                chat-message(
+                  ng-repeat="msg in messages track by $index",
+                  message="msg",
+                  send-to="setRecipient"
+                )
+
+            form(
+              name="chat"
+              ng-submit="sendMessage(newMessage)"
+            ).chat__controls.form
+              label.chat__switch
+                input(
+                  type="checkbox",
+                  name="private",
+                  ng-model="newMessage.isPrivate"
+                  ng-disabled="!user"
+                )
+                .label.label_info(ng-show="!newMessage.isPrivate")
+                  | Публичное сообщение
+
+                .label.label_danger(ng-show="newMessage.isPrivate")
+                  | Приватное сообщение
+                  span(ng-if="!newMessage.recipients.length")
+                    |. Выберите адресата сообщения
+
+              .label(
+                ng-repeat="recipient in newMessage.recipients",
+                ng-class="{'label_info': !newMessage.isPrivate, 'label_danger': newMessage.isPrivate}"
+              )
+                | {{recipient.nickname}}
+                a(ng-click="removeRecipient(recipient)").label__close
+                  i.fa.fa-times
+
+              .chat__control
+                input(
+                  name="message",
+                  ng-model="newMessage.text"
+                  placeholder="Напишите что-нибудь",
+                  required,
+                  ng-disabled="disableControls()"
+                ).chat__input.form__control
+
+                input(
+                  type="submit"
+                  value="Отправить",
+                  ng-disabled="chat.$invalid || disableControls()"
+                ).btn.btn_primary.chat__submit
+
+
+
+
 
     |<!-- bower:js -->
     |<!-- endbower -->

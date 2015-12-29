@@ -1,20 +1,22 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path')
-var users = require(path.join(process.cwd(), '/models/user.js'));
+var generateAvatar = require('generateAvatar');
+var error = require('error');
+var users = require('../models/user.js');
 
 router.post('/users/signup', function (req, res) {
-  var user = new users(req.body)
+  var user = new users(req.body);
+  user.avatar = generateAvatar();
 
   user.save(function (err, user) {
     if (err) {
-      return res.json({
-        success: false,
-        message: 'Sign up error! ' + err
-      });
+      return error(res, 500, 'Signup error', err);
     }
 
-    res.json({success: true, user: user});
+    req.session.user = user._id;
+    req.session.save();
+    res.json({data: {success: true, user: user}});
   });
 });
 
@@ -23,33 +25,38 @@ router.post('/users/login', function (req, res) {
 
   users.findOne({email: user.email}, function (err, user) {
     if (err) {
-      return res.json({
-        success: false,
-        message: 'Login error!!! ' + err
-      });
+      return error(res, 500, 'Login error!', err);
     }
 
     if (!user) {
-      res.json({
-        success: false, 
-        message: 'No such user!'
-      });
+      return error(res, 404, 'User doesn\'t exists!', err);
     }
 
-    res.json({success: true, user: user});
+    req.session.user = user._id;
+    res.json({data: {success: true, user: user}});
   });
 });
 
-router.post('/users/edit', function (req, res) {
-  var user = req.body;
+router.get('/users/session', function (req, res) {
+  console.log('session', req.session.user);
 
-  users.update({email: user.email}, user, function (err, user) {
-    if (err) {
-      return res.json({err: 'Edit login error!!! ' + err});
-    }
+  if (req.session.user) {
+    users.findOne({ _id: req.session.user }).exec(function (err, data) {
+      if (err) {
+        return next(err);
+      }
 
-    res.json({success: true, user: user});
-  });
-})
+
+      res.json({data: {success: true, user: data}});
+    });
+  } else {
+    res.json({data: {success: false}});
+  }
+});
+
+router.post('/users/logout', function (req, res, next) {
+  req.session.destroy();
+  res.json({success: true});
+});
 
 module.exports = router;

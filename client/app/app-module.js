@@ -9,6 +9,16 @@
   angular
     .module('client', [
       'ui.router',
-      'home'
-    ]);
+      'luegg.directives',
+      'users',
+      'main',
+      'socket',
+      'chat'
+    ])
+    .config(function (RestangularProvider) {
+      RestangularProvider.setBaseUrl('http://localhost:8000');
+    })
+    .run(function (User) {
+      User.init();
+    });
 }());

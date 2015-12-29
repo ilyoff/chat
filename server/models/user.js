@@ -1,6 +1,7 @@
 var crypto = require('crypto');
 var mongoose = require('db');
 var Schema = mongoose.Schema;
+var path = require('path');
 
 var schema = new Schema({
   email: {
@@ -11,18 +12,19 @@ var schema = new Schema({
 
   hashed_pass: {
     type: String,
-    unique: true,
     required: true
   },
   salt: {
     type: String,
-    unique: true,
     required: true
   },
-  nickName: {
+  nickname: {
     type: String,
-    unique: true,
     required: true
+  },
+
+  avatar: {
+    type: String
   }
 });
 

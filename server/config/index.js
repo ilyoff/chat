@@ -12,7 +12,17 @@ var config = {
           "keepAlive": 1
         }
       }
-    },
+    }
+  },
+  "session": {
+    "secret": "KillerIsJim",
+    "key": "sid",
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "expires": null,
+      "secure": false
+    }
   }
 }
 

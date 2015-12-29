@@ -3,7 +3,7 @@
 
   /**
    * @ngdoc service
-   * @name users.factory:Users
+   * @name users.factory:User
    *
    * @description
    * Factory for users managing
@@ -11,36 +11,57 @@
    */
   angular
     .module('users')
-    .factory('Users', Users);
+    .factory('User', User);
 
-  function Users(Restangular) {
-    var Users = Restangular.one('users');
+  function User($rootScope, Restangular, Socket) {
+    var User = Restangular.one('users');
+    var currentUser = null;
+
+    function successCallback(res) {
+      currentUser = res.data.user;
+      Socket.emit('users:join', currentUser);
+      return currentUser;
+    };
+
+    function errorCallback (err) {
+      return err.data;
+    };
 
     return {
+      getCurrentUser: function () {
+        return currentUser;
+      },
+
+      init: function initUser() {
+        User.customGET('session').then(function (res) {
+          if (res.data.success) {
+            console.log(res.data);
+            currentUser = res.data.user;
+            Socket.emit('users:join', currentUser);
+            $rootScope.$broadcast('users:update')
+          }
+        });
+      },
+
       login: function (user) {
-        return Users
+        return User
                 .post('login', user)
-                .then(function (res) {
-                  return res.data;
-                })
+                .then(successCallback, errorCallback)
       },
 
       signup: function (user) {
-        return Users
+        return User
                 .post('signup', user)
-                .then(function (res) {
-                  console.log(res);
-                  return res.data;
-                })
+                .then(successCallback, errorCallback);
       },
 
-      edit: function (user) {
-        return Users
-                .post('edit', user)
-                .then(function (res) {
-                  return res.data;
-                })
+      logout: function () {
+        return User.post('logout').then(function () {
+          Socket.emit('users:left', currentUser);
+        });
+        currentUser = null;
       }
+
     }
   }
 }());

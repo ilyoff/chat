@@ -1,0 +1,74 @@
+.chat
+  display flex
+  justify-content space-between
+  align-items stretch
+
+  &__aside
+    width 300px
+    padding 20px
+    background #ccc
+
+    @media (max-width: 850px)
+      position absolute
+      top 50px
+      width 100%
+      height calc(100vh - 50px)
+      transform translateX(-100%)
+      transition transform .8s
+      z-index 999
+
+      &_open
+        transform translateX(0)
+
+  &__main
+    position relative
+    display flex
+    width calc(100vw - 300px)
+    flex-grow 2
+    flex-direction column
+    border-bottom 1px solid transparent
+    padding-bottom 1px
+
+    @media (max-width: 850px)
+      width 100vw
+      flex-grow 1
+  &__content
+    position relative
+    height calc(100vh - 130px)
+
+  &__list
+    position absolute
+    bottom 0
+    left 0
+    width 100%
+    height 100%
+    overflow auto
+
+  &__controls
+    width 100%
+    height 80px
+    padding 0
+    border-top 1px solid #ccc
+
+  &__switch
+    display inline-block
+    cursor pointer
+
+    input
+      display none
+
+  &__control
+    width 100%
+    margin-top 5px
+    display flex
+    justify-content space-between
+
+  &__input
+    display block
+    width 100%
+    flex-grow 2
+
+.online-user
+  .user-card__name
+    line-height 40px
+
